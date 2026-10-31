@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Developer Portfolio | Interactive Systems & Indie Games</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts: Inter & Orbitron for Gaming Vibe -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Orbitron', 'sans-serif']
+          },
+          colors: {
+            cyberDark: '#0a0b10',
+            cyberCard: 'rgba(18, 22, 34, 0.75)',
+            neonCyan: '#00f0ff',
+            neonPurple: '#a855f7',
+            neonPink: '#f43f5e',
+            neonEmerald: '#10b981'
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 25px rgba(0, 240, 255, 0.35)',
+            'glow-purple': '0 0 25px rgba(168, 85, 247, 0.35)',
+            'glow-emerald': '0 0 25px rgba(16, 185, 129, 0.35)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0b10;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00f0ff;
+    }
+
+    /* Subtle Glassmorphism Card Style */
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .glass-panel:hover {
+      border-color: rgba(0, 240, 255, 0.3);
+    }
+
+    /* Grid overlay pattern */
+    .grid-bg {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="bg-cyberDark text-slate-100 font-sans selection:bg-neonCyan selection:text-black relative overflow-x-hidden">
+
+  <!-- Interactive Background Canvas (Stars & Cyber Particles) -->
+  <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+  <!-- Navigation Bar -->
+  <header class="fixed top-0 left-0 w-full z-40 glass-panel border-b border-slate-800/80 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <!-- Logo / Dev Moniker -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-black font-black text-lg shadow-glow-cyan group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-gamepad text-white"></i>
+        </div>
+        <div>
+          <span class="font-display font-bold text-lg sm:text-xl tracking-wider text-white flex items-center gap-1">
+            DEV<span class="text-neonCyan">FORGE</span>
+          </span>
+          <span class="text-[10px] block text-slate-400 tracking-widest font-mono uppercase">Game Dev Portfolio</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+        <a href="#about" class="hover:text-neonCyan transition-colors">About</a>
+        <a href="#featured-games" class="hover:text-neonCyan transition-colors">Featured Games</a>
+        <a href="#projects" class="hover:text-neonCyan transition-colors">Prototypes</a>
+        <a href="#skills" class="hover:text-neonCyan transition-colors">Skills</a>
+        <a href="#video-reel" class="hover:text-neonCyan transition-colors">Showreel</a>
+        <a href="#contact" class="hover:text-neonCyan transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Button -->
+      <div class="hidden sm:flex items-center gap-3">
+        <!-- Quick Editing Guide Drawer Trigger -->
+        <button onclick="toggleGuideModal(true)" class="px-3 py-2 text-xs rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700 flex items-center gap-2">
+          <i class="fa-solid fa-code"></i> <span>Customizer Guide</span>
+        </button>
+
+        <!-- Itch.io Profile Link -->
+        <a href="https://itch.io" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-xs font-semibold rounded-lg bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-md hover:brightness-110 transition flex items-center gap-2">
+          <i class="fa-brands fa-itch-io text-base"></i>
+          <span>My Itch.io</span>
+        </a>
+      </div>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button id="mobile-menu-btn" class="md:hidden text-slate-300 p-2 focus:outline-none" aria-label="Toggle menu">
+        <i class="fa-solid fa-bars text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-slate-800 px-6 py-4 flex flex-col gap-4 text-sm font-medium">
+      <a href="#about" onclick="closeMobileMenu()" class="hover:text-neonCyan py-1">About</a>
+      <a href="#featured-games" onclick="closeMobileMenu()" class="hover:text-neonCyan py-1">Featured Games</a>
+      <a href="#projects" onclick="closeMobileMenu()" class="hover:text-neonCyan py-1">Prototypes</a>
+      <a href="#skills" onclick="closeMobileMenu()" class="hover:text-neonCyan py-1">Skills</a>
+      <a href="#video-reel" onclick="closeMobileMenu()" class="hover:text-neonCyan py-1">Showreel</a>
+      <a href="#contact" onclick="closeMobileMenu()" class="hover:text-neonCyan py-1">Contact</a>
+      <div class="pt-3 border-t border-slate-700 flex gap-2">
+        <button onclick="toggleGuideModal(true); closeMobileMenu();" class="flex-1 py-2 text-xs text-center rounded-lg bg-slate-800 text-slate-200">Guide</button>
+        <a href="https://itch.io" target="_blank" class="flex-1 py-2 text-xs text-center rounded-lg bg-red-600 text-white font-semibold">My Itch.io</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="relative z-10 pt-28 sm:pt-36">
+    <section id="hero" class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 flex flex-col items-center text-center">
+      
+      <!-- Live Status Pill -->
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 text-xs font-mono mb-6 shadow-sm animate-pulse">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span>Open for Game Jams, Contracts & Indie Collabs</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-display font-extrabold tracking-tight text-white mb-6 max-w-4xl leading-tight">
+        Building Immersive Worlds & <span class="bg-clip-text text-transparent bg-gradient-to-r from-neonCyan via-purple-400 to-pink-500">Tactile Mechanics</span>
+      </h1>
+
+      <!-- Intro Subtitle -->
+      <p class="text-slate-300 text-base sm:text-lg max-w-2xl font-light leading-relaxed mb-8">
+        Indie Game Developer & Gameplay Programmer specializing in vehicle dynamics, responsive controller systems, physics interactions, and immersive 3D/2D games. Explore playable builds right on Itch.io!
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mb-16">
+        <a href="#featured-games" class="px-7 py-3.5 rounded-xl font-semibold bg-gradient-to-r from-neonCyan to-blue-600 text-black hover:shadow-glow-cyan hover:scale-[1.02] transition duration-200 flex items-center gap-2">
+          <i class="fa-solid fa-gamepad"></i>
+          <span>Play Games on Itch.io</span>
+        </a>
+        <a href="#video-reel" class="px-7 py-3.5 rounded-xl font-semibold bg-slate-900/80 hover:bg-slate-800 text-white border border-slate-700 hover:border-slate-500 transition duration-200 flex items-center gap-2">
+          <i class="fa-solid fa-circle-play text-purple-400"></i>
+          <span>Watch 2026 Showreel</span>
+        </a>
+      </div>
+
+      <!-- Key Stats Counters -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-4xl">
+        <div class="glass-panel p-5 rounded-2xl text-center">
+          <div class="font-display text-3xl sm:text-4xl font-bold text-neonCyan mb-1">12+</div>
+          <div class="text-xs uppercase tracking-wider text-slate-400 font-mono">Itch.io Games & Demos</div>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl text-center">
+          <div class="font-display text-3xl sm:text-4xl font-bold text-neonPurple mb-1">45k+</div>
+          <div class="text-xs uppercase tracking-wider text-slate-400 font-mono">Player Plays / Downloads</div>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl text-center">
+          <div class="font-display text-3xl sm:text-4xl font-bold text-neonEmerald mb-1">5+</div>
+          <div class="text-xs uppercase tracking-wider text-slate-400 font-mono">Years Engine Experience</div>
+        </div>
+        <div class="glass-panel p-5 rounded-2xl text-center">
+          <div class="font-display text-3xl sm:text-4xl font-bold text-pink-400 mb-1">3</div>
+          <div class="text-xs uppercase tracking-wider text-slate-400 font-mono">Game Jam Finalists</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 border-t border-slate-900 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <!-- Avatar & Profile Spec Card -->
+          <div class="lg:col-span-5 flex flex-col items-center">
+            <div class="relative group">
+              <!-- Glow backdrop -->
+              <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-neonCyan to-purple-600 opacity-60 blur-xl group-hover:opacity-100 transition duration-500"></div>
+              
+              <div class="relative glass-panel rounded-3xl p-6 overflow-hidden max-w-sm">
+                <!-- Developer Avatar Placeholder -->
+                <div class="w-full aspect-square rounded-2xl bg-gradient-to-tr from-slate-900 to-indigo-950 flex flex-col items-center justify-center border border-slate-700/60 overflow-hidden relative">
+                  <i class="fa-solid fa-headset text-7xl text-cyan-400/80 mb-3"></i>
+                  <span class="text-xs font-mono text-slate-400">Dev Avatar / Portrait</span>
+                  <!-- Corner accent badge -->
+                  <div class="absolute top-3 right-3 px-2 py-1 rounded-md bg-black/60 border border-slate-700 text-[10px] font-mono text-neonCyan">
+                    LEVEL 28 DEV
+                  </div>
+                </div>
+
+                <div class="mt-5 text-center">
+                  <h3 class="font-display font-bold text-xl text-white">Alex "Voxel" Chen</h3>
+                  <p class="text-xs text-neonCyan font-mono mt-0.5">Gameplay & Systems Programmer</p>
+                  <p class="text-xs text-slate-400 mt-2">C# • Unity • Physics • Shader Optimization</p>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-800 flex justify-center gap-4 text-slate-400 text-lg">
+                  <a href="https://itch.io" class="hover:text-red-400 transition" title="Itch.io"><i class="fa-brands fa-itch-io"></i></a>
+                  <a href="https://github.com" class="hover:text-white transition" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                  <a href="https://youtube.com" class="hover:text-red-500 transition" title="YouTube Devlogs"><i class="fa-brands fa-youtube"></i></a>
+                  <a href="https://twitter.com" class="hover:text-cyan-400 transition" title="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Developer Bio & Core Philosophy -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-800 text-cyan-400 text-xs font-mono tracking-wide">
+              <i class="fa-solid fa-terminal"></i> <span>DEVELOPER_PROFILE.md</span>
+            </div>
+            
+            <h2 class="text-3xl sm:text-4xl font-display font-bold text-white leading-tight">
+              Crafting games that feel <span class="text-neonCyan">satisfying</span> under your thumbs.
+            </h2>
+            
+            <p class="text-slate-300 text-base leading-relaxed">
+              Hello! I'm a game developer passionate about mechanical depth and game feel ("juice"). From writing custom arcade vehicle suspension controllers to building procedural dungeon generation algorithms, I obsess over responsive player feedback, punchy audio triggers, and tight camera work.
+            </p>
+
+            <p class="text-slate-300 text-base leading-relaxed">
+              I actively ship games on <strong class="text-white">Itch.io</strong>, participate in international 48-hour Game Jams, and build modular systems for indie studios. Whether it's an arcade racer, an atmospheric 2D platformer, or a gritty survival prototype, my focus is always on rapid iteration and buttery-smooth gameplay.
+            </p>
+
+            <!-- Key pillars -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+              <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800">
+                <i class="fa-solid fa-bolt text-neonCyan text-xl mb-2"></i>
+                <h4 class="font-semibold text-sm text-white">Juicy Physics</h4>
+                <p class="text-xs text-slate-400 mt-1">Weighty handling, raycast suspension, kinetic recoil.</p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800">
+                <i class="fa-solid fa-code-branch text-neonPurple text-xl mb-2"></i>
+                <h4 class="font-semibold text-sm text-white">Clean Systems</h4>
+                <p class="text-xs text-slate-400 mt-1">ScriptableObject workflows, event-driven state machines.</p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800">
+                <i class="fa-solid fa-gauge-high text-neonEmerald text-xl mb-2"></i>
+                <h4 class="font-semibold text-sm text-white">High Performance</h4>
+                <p class="text-xs text-slate-400 mt-1">Optimized draw calls, WebGL tuning, smooth 60+ FPS.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Games / Itch.io Showcase Section -->
+    <section id="featured-games" class="py-20 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div>
+            <div class="text-xs font-mono text-neonCyan tracking-widest uppercase mb-2">// SHIPPED EXPERIENCES</div>
+            <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white">Featured Games</h2>
+            <p class="text-slate-400 text-sm mt-2 max-w-xl">
+              Playable titles published on Itch.io. Click "Play on Itch.io" to jump straight into action, or explore screenshots and technical breakdowns.
+            </p>
+          </div>
+
+          <!-- Filter Tabs -->
+          <div class="flex flex-wrap items-center gap-2 bg-slate-900/80 p-1.5 rounded-xl border border-slate-800" id="filter-container">
+            <button onclick="filterGames('all')" class="filter-btn px-4 py-2 text-xs font-semibold rounded-lg bg-neonCyan text-black transition-all" data-category="all">All Titles</button>
+            <button onclick="filterGames('action')" class="filter-btn px-4 py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all" data-category="action">Action / Racing</button>
+            <button onclick="filterGames('indie')" class="filter-btn px-4 py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all" data-category="indie">Game Jam / Indie</button>
+            <button onclick="filterGames('webgl')" class="filter-btn px-4 py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all" data-category="webgl">WebGL Browser</button>
+          </div>
+        </div>
+
+        <!-- Games Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="games-grid">
+          <!-- Game cards will be dynamically rendered via JavaScript with full metadata -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Projects & Prototypes Showcase (More experimental demos) -->
+    <section id="projects" class="py-16 bg-slate-950/60 border-t border-slate-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-14">
+          <span class="text-xs font-mono text-neonPurple tracking-widest uppercase mb-2 block">// R&D & EXPERIMENTS</span>
+          <h2 class="text-3xl sm:text-4xl font-display font-bold text-white">Prototypes & Interactive Systems</h2>
+          <p class="text-slate-400 text-sm mt-3">
+            Experimental mechanics, physics sandboxes, and game mechanics built to test cutting-edge gameplay ideas.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Prototype 1 -->
+          <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition duration-300">
+            <div>
+              <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-4">
+                <span class="px-2.5 py-1 rounded bg-slate-800 text-cyan-400 border border-slate-700">Vehicle Sim</span>
+                <span>Active R&D</span>
+              </div>
+              <h3 class="text-xl font-bold text-white mb-2 font-display">Drift & Grip Physics Sandbox</h3>
+              <p class="text-slate-300 text-xs leading-relaxed mb-4">
+                Raycast vehicle suspension with dynamic slip angles, weight distribution under braking, and custom skidmark particle generators.
+              </p>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="text-[11px] bg-slate-800/90 text-slate-300 px-2 py-0.5 rounded">C#</span>
+                <span class="text-[11px] bg-slate-800/90 text-slate-300 px-2 py-0.5 rounded">Custom Raycast</span>
+                <span class="text-[11px] bg-slate-800/90 text-slate-300 px-2 py-0.5 rounded">Unity 6</span>
+              </div>
+            </div>
+            <a href="https://itch.io" target="_blank" class="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-neonCyan hover:text-black text-slate-200 text-xs font-semibold text-center transition flex items-center justify-center gap-2">
+              <span>View Prototype on Itch.io</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+
+          <!-- Prototype 2 -->
+          <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition duration-300">
+            <div>
+              <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-4">
+                <span class="px-2.5 py-1 rounded bg-slate-800 text-purple-400 border border-slate-700">AI & Behavior</span>
+                <span>Demo Ready</span>
+              </div>
+              <h3 class="text-xl font-bold text-white mb-2 font-display">Procedural Stealth AI Suite</h3>
+              <p class="text-slate-300 text-xs leading-relaxed mb-4">
+                Utility AI & hierarchical state machine allowing guards to investigate noise cues, alert nearby squad members, and conduct sweeping searches.
+              </p>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="text-[11px] bg-slate-800/90 text-slate-300 px-2 py-0.5 rounded">Behavior Trees</span>
+                <span class="text-[11px] bg-slate-800/90 text-slate-300 px-2 py-0.5 rounded">NavMesh</span>
+                <span class="text-[11px] bg-slate-800/90 text-slate-300 px-2 py-0.5 rounded">Stealth Sensory</span>
+              </div>
+            </div>
+            <a href="https://itch.io" target="_blank" class="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-neonPurple hover:text-white text-slate-200 text-xs font-semibold text-center transition flex items-center justify-center gap-2">
+              <span>Test AI WebGL Demo</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+
+          <!-- Prototype 3 -->
+          <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:-translate-y-1 transition duration-300">
+            <div>
+              <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-4">
+                <span class="px-2.5 py-1 rounded bg-slate-800 text-emerald-400 border border-slate-700">Shaders</span>
+                <span>Open Source</span>
+              </div>
+              <h3 class="text-xl font-bold text-white mb-2 font-display">Retro CRT & Hologram Pack</h3>
+              <p class="text-slate-300 text-xs leading-relaxed mb-4">
+                Performant HLSL shaders recreating scanlines, barrel distortion, phosphor chromatic aberration, and holographic glitches for retro titles.
+              </p>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="text-[11px] bg-slate-800/90 text-slate-300 px-2 py-0.5 rounded">HLSL</span>
+                <span class="text-[11px] bg-slate-800/90 text-slate-300 px-2 py-0.5 rounded">Shader Graph</span>
+                <span class="text-[11px] bg-slate-800/90 text-slate-300 px-2 py-0.5 rounded">Post-Processing</span>
+              </div>
+            </div>
+            <a href="https://github.com" target="_blank" class="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-neonEmerald hover:text-black text-slate-200 text-xs font-semibold text-center transition flex items-center justify-center gap-2">
+              <span>Get Shader Assets</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills & Technical Arsenal -->
+    <section id="skills" class="py-20 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <div class="text-xs font-mono text-neonCyan tracking-widest uppercase mb-2">// TECHNICAL PROFICIENCY</div>
+          <h2 class="text-3xl sm:text-5xl font-display font-bold text-white">Developer Arsenal</h2>
+          <p class="text-slate-400 text-sm mt-3">
+            Tools, languages, and technical frameworks I deploy across indie productions and rapid prototyping sprints.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <!-- Category 1: Game Engines & Runtimes -->
+          <div class="glass-panel p-6 rounded-2xl border-t-2 border-t-neonCyan">
+            <div class="flex items-center gap-3 mb-4">
+              <i class="fa-brands fa-unity text-2xl text-neonCyan"></i>
+              <h3 class="font-display font-semibold text-lg text-white">Game Engines</h3>
+            </div>
+            <ul class="space-y-3 text-xs text-slate-300 font-medium">
+              <li class="flex items-center justify-between">
+                <span>Unity (2D & 3D, URP)</span>
+                <span class="text-neonCyan font-mono">Expert</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>Godot Engine 4</span>
+                <span class="text-slate-400 font-mono">Proficient</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>WebGL Pipeline</span>
+                <span class="text-neonCyan font-mono">Expert</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>Unreal Engine 5 (BP)</span>
+                <span class="text-slate-400 font-mono">Intermediate</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Category 2: Programming Languages -->
+          <div class="glass-panel p-6 rounded-2xl border-t-2 border-t-neonPurple">
+            <div class="flex items-center gap-3 mb-4">
+              <i class="fa-solid fa-code text-2xl text-neonPurple"></i>
+              <h3 class="font-display font-semibold text-lg text-white">Languages</h3>
+            </div>
+            <ul class="space-y-3 text-xs text-slate-300 font-medium">
+              <li class="flex items-center justify-between">
+                <span>C# (.NET Architecture)</span>
+                <span class="text-neonPurple font-mono">Expert</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>HLSL / ShaderLab</span>
+                <span class="text-slate-400 font-mono">Proficient</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>GDScript / Python</span>
+                <span class="text-slate-400 font-mono">Proficient</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>JavaScript / WebGL</span>
+                <span class="text-slate-400 font-mono">Intermediate</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Category 3: Gameplay Systems -->
+          <div class="glass-panel p-6 rounded-2xl border-t-2 border-t-neonEmerald">
+            <div class="flex items-center gap-3 mb-4">
+              <i class="fa-solid fa-gears text-2xl text-neonEmerald"></i>
+              <h3 class="font-display font-semibold text-lg text-white">Core Systems</h3>
+            </div>
+            <ul class="space-y-3 text-xs text-slate-300 font-medium">
+              <li class="flex items-center justify-between">
+                <span>Vehicle & Rigidbody Physics</span>
+                <span class="text-neonEmerald font-mono">Advanced</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>Custom Character Controllers</span>
+                <span class="text-neonEmerald font-mono">Advanced</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>Finite State Machines & AI</span>
+                <span class="text-neonEmerald font-mono">Advanced</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>Game Feel & Screen Shake Audio</span>
+                <span class="text-neonEmerald font-mono">Specialist</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Category 4: Tools & Pipelines -->
+          <div class="glass-panel p-6 rounded-2xl border-t-2 border-t-pink-500">
+            <div class="flex items-center gap-3 mb-4">
+              <i class="fa-solid fa-toolbox text-2xl text-pink-500"></i>
+              <h3 class="font-display font-semibold text-lg text-white">Tools & Art</h3>
+            </div>
+            <ul class="space-y-3 text-xs text-slate-300 font-medium">
+              <li class="flex items-center justify-between">
+                <span>Blender (3D Modeling & Rigging)</span>
+                <span class="text-pink-400 font-mono">Proficient</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>Git & GitHub Workflows</span>
+                <span class="text-pink-400 font-mono">Expert</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>Aseprite (Pixel Animation)</span>
+                <span class="text-pink-400 font-mono">Proficient</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span>FMOD / Audacity Sound FX</span>
+                <span class="text-pink-400 font-mono">Proficient</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Showcase / Gameplay Reel Section -->
+    <section id="video-reel" class="py-20 bg-slate-950/80 border-t border-slate-900 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <span class="text-xs font-mono text-neonCyan tracking-widest uppercase mb-2 block">// GAMEPLAY FOOTAGE & REEL</span>
+          <h2 class="text-3xl sm:text-5xl font-display font-bold text-white">Video Showcase</h2>
+          <p class="text-slate-400 text-sm mt-3">
+            Watch real-time gameplay clips, physics interactions, and sound design in action. Swap this video with your own YouTube or Google Drive video link!
+          </p>
+        </div>
+
+        <!-- Video Player Wrapper -->
+        <div class="max-w-4xl mx-auto">
+          <div class="relative glass-panel rounded-2xl overflow-hidden shadow-2xl border border-slate-800 group">
+            
+            <!-- Video Aspect 16:9 Frame -->
+            <div class="relative w-full aspect-video bg-black flex items-center justify-center">
+              <!-- Embedded Responsive Video / YouTube Embed Placeholder -->
+              <iframe 
+                id="main-showreel-iframe"
+                class="w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?controls=1&rel=0" 
+                title="Gameplay Showreel" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+              </iframe>
+            </div>
+
+            <!-- Video Info & Timestamps -->
+            <div class="p-6 bg-slate-900/90 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <h4 class="font-display font-semibold text-white text-base">Game Highlights & Mechanics Reel</h4>
+                <p class="text-xs text-slate-400 mt-1">Footage includes Raycast Vehicle Physics, Cyber Samurai Combat, and Low-Poly Flight Sim.</p>
+              </div>
+
+              <!-- Quick Timestamp Chips -->
+              <div class="flex flex-wrap gap-2">
+                <span class="px-2.5 py-1 rounded bg-slate-800 text-neonCyan text-[11px] font-mono">0:00 Drift Mechanics</span>
+                <span class="px-2.5 py-1 rounded bg-slate-800 text-neonPurple text-[11px] font-mono">0:45 Combat Feel</span>
+                <span class="px-2.5 py-1 rounded bg-slate-800 text-neonEmerald text-[11px] font-mono">1:20 Boss AI</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Itch.io Profile Banner CTA -->
+    <section class="py-16 relative">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-red-950/70 via-slate-900 to-indigo-950/70 border border-red-500/30 p-8 sm:p-12 text-center glass-panel">
+          <div class="max-w-2xl mx-auto space-y-4">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-red-600 to-pink-500 flex items-center justify-center text-white text-3xl shadow-lg">
+              <i class="fa-brands fa-itch-io"></i>
+            </div>
+            <h3 class="text-2xl sm:text-4xl font-display font-bold text-white">Ready to test my games?</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+              Every prototype, game jam submission, and downloadable build is maintained on Itch.io. Rate, leave feedback, and follow for upcoming releases!
+            </p>
+            <div class="pt-4 flex flex-wrap justify-center gap-4">
+              <a href="https://itch.io" target="_blank" rel="noopener noreferrer" class="px-8 py-3.5 rounded-xl font-bold bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-600/30 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                <span>Visit My Itch.io Page</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+              </a>
+              <button onclick="copyItchLink()" class="px-6 py-3.5 rounded-xl font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
+                <i class="fa-solid fa-copy"></i>
+                <span id="copy-btn-text">Copy Itch.io Link</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & Footer Section -->
+    <section id="contact" class="py-20 border-t border-slate-900 relative bg-cyberDark">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          
+          <!-- Contact Left: Bio & Direct Outreach -->
+          <div>
+            <div class="text-xs font-mono text-neonCyan tracking-widest uppercase mb-2">// CONNECT & COLLABORATE</div>
+            <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mb-4">Let's Build Something Great</h2>
+            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+              I'm always excited to collaborate on indie games, game jams, contract mechanics programming, or full-time opportunities. Reach out via email or direct message!
+            </p>
+
+            <div class="space-y-4">
+              <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                <div class="w-10 h-10 rounded-lg bg-neonCyan/10 text-neonCyan flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-400 font-mono">Email Address</div>
+                  <div class="text-sm font-semibold text-white">gamedev.contact@example.com</div>
+                </div>
+                <button onclick="copyEmail()" class="ml-auto px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition">
+                  Copy
+                </button>
+              </div>
+
+              <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                <div class="w-10 h-10 rounded-lg bg-neonPurple/10 text-neonPurple flex items-center justify-center text-lg">
+                  <i class="fa-brands fa-discord"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-400 font-mono">Discord Username</div>
+                  <div class="text-sm font-semibold text-white">AlexDev#0404</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Message Form (Client-Side mailto generator) -->
+          <div class="glass-panel p-6 sm:p-8 rounded-2xl">
+            <h3 class="font-display font-semibold text-lg text-white mb-4">Send a Direct Inquiry</h3>
+            <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1">Your Name / Studio</label>
+                <input type="text" id="sender-name" required placeholder="e.g. Pixel Spark Studios" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-neonCyan transition">
+              </div>
+
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1">Your Email</label>
+                <input type="email" id="sender-email" required placeholder="name@domain.com" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-neonCyan transition">
+              </div>
+
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1">Project Details or Inquiries</label>
+                <textarea id="sender-msg" rows="3" required placeholder="Tell me about your game or collaboration idea..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-neonCyan transition"></textarea>
+              </div>
+
+              <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-neonCyan to-blue-600 font-bold text-black text-sm hover:shadow-glow-cyan transition">
+                Send Message
+              </button>
+            </form>
+            <div id="form-feedback" class="mt-3 text-xs text-emerald-400 text-center hidden"></div>
+          </div>
+
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="mt-16 pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+          <div>
+            © 2026 Game Developer Portfolio. Built for high performance & itch.io distribution.
+          </div>
+          <div class="flex items-center gap-6">
+            <a href="#hero" class="hover:text-neonCyan transition flex items-center gap-1">
+              <span>Back to Top</span>
+              <i class="fa-solid fa-arrow-up"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Interactive Project Details / Lightbox Modal -->
+  <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+    <div class="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-panel rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-2xl text-slate-100">
+      
+      <!-- Close Button -->
+      <button onclick="closeModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition" aria-label="Close modal">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <!-- Modal Content Body -->
+      <div id="modal-content" class="space-y-6">
+        <!-- Rendered dynamically via openModal(gameId) -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Customizer & Google Drive Hosting Guide Modal -->
+  <div id="guide-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+    <div class="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto glass-panel rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-2xl text-slate-100">
+      
+      <button onclick="toggleGuideModal(false)" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="space-y-5">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-neonCyan/20 text-neonCyan flex items-center justify-center text-xl">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-xl text-white">Portfolio Customization & Hosting Guide</h3>
+            <p class="text-xs text-slate-400">How to replace links, add screenshots, and host for free</p>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-xs text-slate-300">
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h4 class="font-bold text-neonCyan mb-1 flex items-center gap-2">
+              <i class="fa-solid fa-1"></i> How to update your Itch.io Links and Game Data:
+            </h4>
+            <p class="leading-relaxed">
+              Open this <code class="text-pink-400 font-mono">index.html</code> file in any text editor (like VS Code or Notepad). Look for the <code class="text-pink-400 font-mono">const GAMES_DATA = [...]</code> JavaScript array near line 450. You can edit game titles, descriptions, itch.io URLs, and screenshot image links easily.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h4 class="font-bold text-neonPurple mb-1 flex items-center gap-2">
+              <i class="fa-solid fa-2"></i> Adding Your Screenshots & Videos:
+            </h4>
+            <p class="leading-relaxed">
+              Replace the placeholder image URLs (e.g. from <code class="text-slate-400">placehold.co</code>) with your actual screenshot images. You can host images on Imgur, Discord, GitHub, or in the same folder. For the showreel video, replace the YouTube ID inside the <code class="text-slate-400">&lt;iframe&gt;</code> with your video's embed link.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+            <h4 class="font-bold text-neonEmerald mb-1 flex items-center gap-2">
+              <i class="fa-solid fa-3"></i> Hosting on Google Drive or Free Web Hosts:
+            </h4>
+            <ul class="list-disc list-inside space-y-1.5 text-slate-300">
+              <li><strong class="text-white">Google Drive:</strong> You can upload this HTML file to Google Drive and use tools like <em>DriveToWeb (drv.tw)</em> to turn a public Google Drive folder into a live website.</li>
+              <li><strong class="text-white">GitHub Pages:</strong> Push this file named <code class="font-mono text-neonCyan">index.html</code> to a GitHub repository and turn on Pages in Settings for free, instant HTTPS hosting!</li>
+              <li><strong class="text-white">Netlify / Vercel:</strong> Drag and drop the folder containing this file to Netlify Drop for instantaneous hosting.</li>
+            </ul>
+          </div>
+        </div>
+
+        <button onclick="toggleGuideModal(false)" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition">
+          Got It, Let's Check My Portfolio!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Box -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl bg-slate-900 border border-neonCyan text-white text-xs shadow-glow-cyan transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2">
+    <i class="fa-solid fa-circle-check text-neonCyan"></i>
+    <span id="toast-msg">Notification message</span>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC & DATA DEFINITION -->
+  <script>
+    // =========================================================================
+    // 1. GAME DATA REPOSITORY (EASY TO CUSTOMIZE)
+    // Replace the placeholders below with your genuine game details and links!
+    // =========================================================================
+    const GAMES_DATA = [
+      {
+        id: "cyber-overdrive",
+        title: "Cyber Overdrive: Tokyo Run",
+        category: "action",
+        genre: "Arcade Cyber Racer",
+        platform: ["PC", "WebGL", "Gamepad Support"],
+        itchUrl: "https://itch.io",
+        shortDesc: "High-octane neon drifting game featuring raycast suspension, boost mechanics, and synthwave soundtrack.",
+        fullDesc: "Cyber Overdrive is a fast-paced arcade racing prototype developed in Unity. Players navigate rain-slicked Tokyo highways while drafting opponent vehicles and managing nitro thermals. Features realistic arcade weight transfer, screen shakes, dynamic motion blur, and tight controller support.",
+        stats: { engine: "Unity URP", physics: "Custom Raycast Wheel Collider", time: "3 Weeks" },
+        features: [
+          "Custom slip-angle drift physics model with real-time wheel torque",
+          "Procedural neon light reflections and screen-space rain shaders",
+          "Integrated global leaderboard for fastest time-trials via WebGL"
+        ],
+        coverImage: "https://placehold.co/800x450/09122c/00f0ff?text=Cyber+Overdrive+Tokyo+Run",
+        gallery: [
+          "https://placehold.co/800x450/09122c/00f0ff?text=Tokyo+Highway+Drift+Action",
+          "https://placehold.co/800x450/190826/a855f7?text=Vehicle+Customization+Garage",
+          "https://placehold.co/800x450/06231c/10b981?text=Rainy+Night+Cyber+Aesthetic"
+        ],
+        videoEmbed: "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+      },
+      {
+        id: "shadow-relic",
+        title: "Relic Hunter: Dungeon Protocol",
+        category: "indie",
+        genre: "Isometric Roguelike Action",
+        platform: ["PC", "Mac", "Steam Deck Tested"],
+        itchUrl: "https://itch.io",
+        shortDesc: "Procedural dungeon crawler featuring snappy dodge-roll combat, weapon crafting, and challenging boss AI.",
+        fullDesc: "Created for a 7-day Roguelike challenge, Relic Hunter pits players against biomechanical sentinels deep inside ancient subterranean vaults. Every floor is generated via BSP dungeon generation algorithms with balanced loot tables and dynamic difficulty scaling.",
+        stats: { engine: "Unity C#", physics: "Kinematic 2.5D Controller", time: "7 Days (Jam Winner)" },
+        features: [
+          "Procedural level generator with guaranteed solvable path layouts",
+          "Hierarchical Finite State Machine (FSM) for aggressive enemy swarms",
+          "Modular weapon attachment system combining elemental payloads"
+        ],
+        coverImage: "https://placehold.co/800x450/1e102d/a855f7?text=Relic+Hunter+Dungeon+Protocol",
+        gallery: [
+          "https://placehold.co/800x450/1e102d/a855f7?text=Dungeon+Boss+Encounter",
+          "https://placehold.co/800x450/081a29/00f0ff?text=Inventory+Crafting+System",
+          "https://placehold.co/800x450/171f16/10b981?text=Elemental+Weapon+Sparks"
+        ],
+        videoEmbed: "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+      },
+      {
+        id: "orbital-salvage",
+        title: "Orbital Salvage: Zero-G",
+        category: "action",
+        genre: "Sci-Fi Physics Simulator",
+        platform: ["PC", "WebGL"],
+        itchUrl: "https://itch.io",
+        shortDesc: "Newtonian zero-gravity spacewalk simulator. Grapple derelict space stations and manage oxygen thrusters.",
+        fullDesc: "Orbital Salvage tests your mastery of pure Newtonian physics in outer space. With no friction, every thruster burst carries kinetic momentum. Use grappling cables, plasma cutters, and thrusters to retrieve precious reactor cores from decaying satellites before re-entry.",
+        stats: { engine: "Unity 3D", physics: "Rigidbody 6-DOF Inertia", time: "1 Month" },
+        features: [
+          "True 6-degrees-of-freedom inertial physics simulation",
+          "Verlet integration cable physics for flexible tethering hooks",
+          "Interactive atmospheric burn-up countdown and spatial audio"
+        ],
+        coverImage: "https://placehold.co/800x450/081423/38bdf8?text=Orbital+Salvage+Zero-G",
+        gallery: [
+          "https://placehold.co/800x450/081423/38bdf8?text=Spacewalk+Grappling+Cable",
+          "https://placehold.co/800x450/200f1c/f43f5e?text=Satellite+Plasma+Cutter",
+          "https://placehold.co/800x450/0e1e12/10b981?text=Earth+Orbit+Atmospheric+Entry"
+        ],
+        videoEmbed: "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+      },
+      {
+        id: "pixel-tactics",
+        title: "Neon Siege: Grid Strike",
+        category: "webgl",
+        genre: "Turn-Based Cyber Strategy",
+        platform: ["WebGL", "Mobile Ready"],
+        itchUrl: "https://itch.io",
+        shortDesc: "Play directly in your browser. Fast-paced 1v1 tactical cyber war on a hex-grid with custom hacking abilities.",
+        fullDesc: "A lightweight, instant-play tactical game tailored for WebGL. Command cyber squads across a reactive electronic grid. Hack power relays, summon counter-virus drones, and exploit positional bonuses in 5-minute lightning rounds.",
+        stats: { engine: "Unity WebGL", physics: "Hex Grid Math (A*)", time: "2 Weeks" },
+        features: [
+          "Sub-15MB initial WebGL download with instantaneous load times",
+          "Optimized A* pathfinding and line-of-sight grid algorithms",
+          "Touch-friendly interface responsive on both mobile & desktop"
+        ],
+        coverImage: "https://placehold.co/800x450/082218/10b981?text=Neon+Siege+Grid+Strike",
+        gallery: [
+          "https://placehold.co/800x450/082218/10b981?text=Hexagonal+Battlefield",
+          "https://placehold.co/800x450/190826/a855f7?text=Cyber+Unit+Abilities",
+          "https://placehold.co/800x450/09122c/00f0ff?text=Victory+Match+Stats"
+        ],
+        videoEmbed: "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+      },
+      {
+        id: "haunted-echoes",
+        title: "Echoes of the Void",
+        category: "indie",
+        genre: "Atmospheric Psychological Mystery",
+        platform: ["PC", "Headphones Recommended"],
+        itchUrl: "https://itch.io",
+        shortDesc: "First-person acoustic exploration game where echolocation is your only method of mapping the environment.",
+        fullDesc: "In the pitch darkness of a flooded subterranean facility, you can only perceive surroundings by clapping, throwing objects, or emitting sonar pulses. Built using high-definition 3D spatial acoustics and responsive particle wave visuals.",
+        stats: { engine: "Unity URP", physics: "Acoustic Wave Bounce", time: "48-Hour Jam" },
+        features: [
+          "Custom GPU particle echolocation shader responding to sounds",
+          "Binaural 3D audio rendering for accurate spatial hearing cues",
+          "Ranked #1 in Theme & Audio in Global Game Jam 2025"
+        ],
+        coverImage: "https://placehold.co/800x450/190a2a/f43f5e?text=Echoes+of+the+Void",
+        gallery: [
+          "https://placehold.co/800x450/190a2a/f43f5e?text=Echolocation+Wave+Ping",
+          "https://placehold.co/800x450/071926/00f0ff?text=Flooded+Subway+Corridor",
+          "https://placehold.co/800x450/0b1812/10b981?text=Subterranean+Sonar+Scanner"
+        ],
+        videoEmbed: "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+      },
+      {
+        id: "tank-arena",
+        title: "Hyper Tank: Micro Wars",
+        category: "webgl",
+        genre: "Retro Arcade Brawler",
+        platform: ["WebGL", "Local Multiplayer"],
+        itchUrl: "https://itch.io",
+        shortDesc: "Chaotic top-down arena tank shooter with ricocheting laser artillery and destructible pixel geometry.",
+        fullDesc: "An homage to classic arcade combat tanks with modern physics flair. Shells ricochet up to 4 times off titanium walls. Features local 2-player split keyboard support, power-ups, missile deflect shields, and explosive particle juice.",
+        stats: { engine: "Unity 2D", physics: "Reflective Laser Raycasts", time: "10 Days" },
+        features: [
+          "Real-time reflective raycasts calculating 4-bounce angles",
+          "Destructible voxel blocks and deformable barriers",
+          "Instant WebGL browser gameplay with gamepad compatibility"
+        ],
+        coverImage: "https://placehold.co/800x450/1c1305/f59e0b?text=Hyper+Tank+Micro+Wars",
+        gallery: [
+          "https://placehold.co/800x450/1c1305/f59e0b?text=Tank+Ricochet+Battle",
+          "https://placehold.co/800x450/09122c/00f0ff?text=Destructible+Arena+Maze",
+          "https://placehold.co/800x450/190826/a855f7?text=Two+Player+Duel+Mode"
+        ],
+        videoEmbed: "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+      }
+    ];
+
+    // =========================================================================
+    // 2. RENDER GAME CARDS
+    // =========================================================================
+    function renderGames(filter = 'all') {
+      const grid = document.getElementById('games-grid');
+      grid.innerHTML = '';
+
+      const filtered = filter === 'all' 
+        ? GAMES_DATA 
+        : GAMES_DATA.filter(g => g.category === filter);
+
+      filtered.forEach(game => {
+        const card = document.createElement('div');
+        card.className = "group glass-panel rounded-2xl overflow-hidden flex flex-col justify-between hover:border-neonCyan/50 transition-all duration-300 hover:-translate-y-1.5 shadow-lg";
+
+        card.innerHTML = `
+          <div>
+            <!-- Thumbnail with hover zoom effect -->
+            <div class="relative w-full aspect-video overflow-hidden bg-slate-900 cursor-pointer" onclick="openModal('${game.id}')">
+              <img 
+                src="${game.coverImage}" 
+                alt="${game.title}" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onerror="this.src='https://placehold.co/800x450/0f172a/00f0ff?text=Game+Screenshot'"
+              >
+              <!-- Platform Pill Badge -->
+              <div class="absolute top-3 left-3 flex flex-wrap gap-1">
+                ${game.platform.map(p => `
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-cyan-300 border border-cyan-500/30">
+                    ${p}
+                  </span>
+                `).join('')}
+              </div>
+
+              <!-- Quick details overlay hint -->
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                <span class="px-3 py-1.5 rounded-lg bg-black/80 text-white text-xs font-medium border border-slate-600 flex items-center gap-1.5">
+                  <i class="fa-solid fa-expand text-neonCyan"></i> View Gallery & Specs
+                </span>
+              </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-6">
+              <div class="text-[11px] font-mono text-neonCyan tracking-wider uppercase mb-1">${game.genre}</div>
+              <h3 class="font-display font-bold text-xl text-white group-hover:text-neonCyan transition-colors mb-2">${game.title}</h3>
+              <p class="text-slate-300 text-xs leading-relaxed line-clamp-3 mb-4">${game.shortDesc}</p>
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="p-6 pt-0 flex items-center gap-3">
+            <!-- Direct Itch.io Launch Button -->
+            <a 
+              href="${game.itchUrl}" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-red-600 to-pink-600 text-white text-xs font-bold hover:brightness-110 transition flex items-center justify-center gap-2 shadow-sm"
+              title="Play on Itch.io"
+            >
+              <i class="fa-brands fa-itch-io text-sm"></i>
+              <span>Play on Itch.io</span>
+            </a>
+
+            <!-- Open Modal Details Button -->
+            <button 
+              onclick="openModal('${game.id}')"
+              class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition flex items-center justify-center gap-1.5"
+              title="View Screenshots & Specs"
+            >
+              <i class="fa-solid fa-circle-info text-neonCyan"></i>
+              <span>Details</span>
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // =========================================================================
+    // 3. FILTER TABS LOGIC
+    // =========================================================================
+    function filterGames(category) {
+      // Toggle button styles
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.dataset.category === category) {
+          btn.className = "filter-btn px-4 py-2 text-xs font-semibold rounded-lg bg-neonCyan text-black transition-all";
+        } else {
+          btn.className = "filter-btn px-4 py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all";
+        }
+      });
+      renderGames(category);
+    }
+
+    // =========================================================================
+    // 4. INTERACTIVE MODAL / LIGHTBOX
+    // =========================================================================
+    function openModal(gameId) {
+      const game = GAMES_DATA.find(g => g.id === gameId);
+      if (!game) return;
+
+      const modal = document.getElementById('project-modal');
+      const container = document.getElementById('modal-content');
+
+      container.innerHTML = `
+        <!-- Title & Badges Header -->
+        <div class="space-y-2 pr-8">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-mono text-neonCyan bg-cyan-950/60 border border-cyan-500/30 px-2.5 py-0.5 rounded">
+              ${game.genre}
+            </span>
+            ${game.platform.map(p => `
+              <span class="text-xs font-mono text-slate-300 bg-slate-800 px-2.5 py-0.5 rounded">
+                ${p}
+              </span>
+            `).join('')}
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-display font-extrabold text-white">${game.title}</h2>
+        </div>
+
+        <!-- Main Media Preview (Gallery / Carousel) -->
+        <div class="space-y-3">
+          <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black border border-slate-700">
+            <img 
+              id="modal-main-img" 
+              src="${game.coverImage}" 
+              alt="${game.title}" 
+              class="w-full h-full object-cover transition-opacity duration-300"
+            >
+          </div>
+
+          <!-- Thumbnail Selector Strip -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-2">
+            <button onclick="setModalMainMedia('${game.coverImage}')" class="flex-shrink-0 w-24 aspect-video rounded-lg overflow-hidden border-2 border-neonCyan hover:opacity-100 transition focus:outline-none">
+              <img src="${game.coverImage}" class="w-full h-full object-cover">
+            </button>
+            ${game.gallery.map((imgUrl, idx) => `
+              <button onclick="setModalMainMedia('${imgUrl}')" class="flex-shrink-0 w-24 aspect-video rounded-lg overflow-hidden border border-slate-700 hover:border-neonCyan hover:opacity-100 transition focus:outline-none">
+                <img src="${imgUrl}" class="w-full h-full object-cover">
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Two Column Breakdown -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          
+          <!-- Left: Story & Mechanics (2 Cols) -->
+          <div class="md:col-span-2 space-y-4">
+            <h4 class="font-display font-semibold text-white text-base">Game Overview</h4>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">${game.fullDesc}</p>
+            
+            <h4 class="font-display font-semibold text-white text-base pt-2">Technical Implementation</h4>
+            <ul class="space-y-2 text-xs sm:text-sm text-slate-300">
+              ${game.features.map(f => `
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-angle-right text-neonCyan mt-1"></i>
+                  <span>${f}</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+
+          <!-- Right: Quick Specs & Play Link (1 Col) -->
+          <div class="space-y-4 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
+            <h4 class="font-display font-semibold text-white text-sm">Project Specs</h4>
+            <div class="space-y-2.5 text-xs">
+              <div class="flex justify-between border-b border-slate-800 pb-1.5">
+                <span class="text-slate-400">Engine / Tools:</span>
+                <span class="text-white font-mono font-medium">${game.stats.engine}</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1.5">
+                <span class="text-slate-400">Core Physics:</span>
+                <span class="text-white font-mono font-medium">${game.stats.physics}</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-800 pb-1.5">
+                <span class="text-slate-400">Dev Duration:</span>
+                <span class="text-neonEmerald font-mono font-medium">${game.stats.time}</span>
+              </div>
+            </div>
+
+            <div class="pt-3">
+              <a 
+                href="${game.itchUrl}" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-pink-600 text-white font-bold text-xs flex items-center justify-center gap-2 hover:brightness-110 shadow-md transition"
+              >
+                <i class="fa-brands fa-itch-io text-base"></i>
+                <span>Launch on Itch.io</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      `;
+
+      // Show modal
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function setModalMainMedia(src) {
+      const img = document.getElementById('modal-main-img');
+      if (img) img.src = src;
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('project-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking backdrop
+    document.getElementById('project-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'project-modal') closeModal();
+    });
+
+    // =========================================================================
+    // 5. HELPER GUIDE MODAL
+    // =========================================================================
+    function toggleGuideModal(show) {
+      const modal = document.getElementById('guide-modal');
+      if (show) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = 'hidden';
+      } else {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // =========================================================================
+    // 6. UTILITY FUNCTIONS (CLIPBOARD & TOAST)
+    // =========================================================================
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+
+    function copyItchLink() {
+      // Safe fallback clipboard copy
+      const itchUrl = "https://itch.io";
+      const tempInput = document.createElement("input");
+      tempInput.value = itchUrl;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+
+      showToast("Itch.io link copied to clipboard!");
+      const btnText = document.getElementById('copy-btn-text');
+      if (btnText) {
+        btnText.innerText = "Copied to Clipboard!";
+        setTimeout(() => btnText.innerText = "Copy Itch.io Link", 2500);
+      }
+    }
+
+    function copyEmail() {
+      const email = "gamedev.contact@example.com";
+      const tempInput = document.createElement("input");
+      tempInput.value = email;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      showToast("Email copied: " + email);
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('sender-name').value;
+      const email = document.getElementById('sender-email').value;
+      const msg = document.getElementById('sender-msg').value;
+
+      // Construct mailto link
+      const mailtoUrl = `mailto:gamedev.contact@example.com?subject=Game%20Inquiry%20from%20${encodeURIComponent(name)}&body=${encodeURIComponent(msg)}%0A%0AFrom:%20${encodeURIComponent(email)}`;
+      window.location.href = mailtoUrl;
+
+      const feedback = document.getElementById('form-feedback');
+      feedback.innerText = "Opening your email client to send message...";
+      feedback.classList.remove('hidden');
+    }
+
+    // Mobile menu toggle
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+    }
+
+    // =========================================================================
+    // 7. RESPONSIVE CYBER PARTICLE CANVAS
+    // =========================================================================
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let width = 0;
+    let height = 0;
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 1.6 + 0.4;
+        this.speedX = (Math.random() - 0.5) * 0.35;
+        this.speedY = (Math.random() - 0.5) * 0.35;
+        this.color = Math.random() > 0.6 ? '#00f0ff' : (Math.random() > 0.5 ? '#a855f7' : '#ffffff');
+        this.alpha = Math.random() * 0.6 + 0.2;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function initParticles() {
+      resizeCanvas();
+      particles = [];
+      const count = Math.min(Math.floor((width * height) / 14000), 75);
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw subtle connecting lines when particles are close
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 90) {
+            ctx.save();
+            ctx.strokeStyle = '#00f0ff';
+            ctx.globalAlpha = 0.08 * (1 - dist / 90);
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+      }
+
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    // Initialize everything on window load
+    window.onload = function () {
+      initParticles();
+      animateParticles();
+      renderGames('all');
+    };
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+    });
+
+    // Close modal on escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        toggleGuideModal(false);
+      }
+    });
+  </script>
+</body>
+</html>
